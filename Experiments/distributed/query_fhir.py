@@ -16,6 +16,7 @@ Y_FEATURE = 'diagnosis'
 class FHIRDataset:
   def __init__(self, fhir_server: str, fhir_port: str) -> None:
     self.client = SyncFHIRClient(f"http://{fhir_server}:{fhir_port}/fhir", authorization="")
+
   def load(self) -> pd.DataFrame:
     patients = self.client.resources("Patient")
     patients_data = []
