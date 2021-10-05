@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
+from fhirpy import SyncFHIRClient
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix
@@ -14,8 +15,8 @@ from sklearn.metrics import confusion_matrix
 # fhir_port = str(os.environ['FHIR_PORT'])
 # mode = str(os.environ['MODE'])
 # station_name = str(os.environ['STATION_NAME'])
-
 # TODO: comment out when deploy
+fhir_server, fhir_port = "137.226.232.119", "8080"
 station_name = "breugel"
 mode = "train"
 
@@ -89,7 +90,37 @@ if cuda:
 data = pd.read_csv('../input/data.csv')
 data = data.drop(['Unnamed: 32', 'id'], axis=1)
 ###############################################################################################
-
+# client = SyncFHIRClient('http://{}:{}/fhir'.format(fhir_server, fhir_port))
+# patients = client.resources('Patient')  # Return lazy search set
+# patients_data = []
+# for patient in patients:
+#     patient_birthDate = None
+#     try:
+#         patient_birthDate = patient.birthDate
+#     except:
+#         pass
+#     patients_data.append([patient.id, patient.gender, patient_birthDate])
+# patients_df = pd.DataFrame(patients_data, columns=["patient_id", "gender", "birthDate"])
+# patients_observation = {}
+# observations = client.resources("Observation").include("Patient", "subject")
+# for observation in observations:
+#     try:
+#         feature = observation["category"][0]["coding"][0]["code"]
+#         if feature in X_FEATURES:
+#             value = observation["valueQuantity"]["value"]
+#             patient_id_str = observation["subject"]["reference"]
+#             if patient_id_str[:7] == "Patient":
+#                 patient_id = patient_id_str[8:]
+#                 if patient_id not in patients_observation:
+#                     patients_observation[patient_id] = {}
+#                 patients_observation[patient_id][feature] = float(value)
+#     except KeyError:
+#         print("Key error encountered, skipping Observation...")
+# for k in patients_observation.keys():
+#     patients_observation[k].update(patient_id=k)
+# observation_df = pd.DataFrame.from_dict(patients_observation.values())
+# observation_df.set_index(["patient_id"])
+# data = pd.merge(patients_df, observation_df, on="patient_id", how="outer")
 
 
 """
