@@ -1,4 +1,5 @@
-import pandas as pd
+import datetime
+import pytz
 
-data = pd.read_csv("./data.csv")
-print(data)
+time = datetime.datetime.now(pytz.timezone('Europe/Berlin'))
+print(str(time))
